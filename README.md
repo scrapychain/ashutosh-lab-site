@@ -1,2 +1,1 @@
-# ashutosh-lab-site
-Personal website.
+## This is personal website of ashutosh rana aka scrapychain.
