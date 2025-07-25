@@ -55,7 +55,7 @@ function validateFrontmatter(
     };  
 }
 
-const loadAllPost = cache(async()=>{
+const loadAllPosts = cache(async()=>{
 
     const files = await fs.readdir(PostsDirectory);
     const mdFiles = files.filter(file => file.endsWith('.md'));
@@ -73,3 +73,57 @@ const loadAllPost = cache(async()=>{
         .filter(({ meta }) => (IS_PRODUCTION ? !meta.draft : true))
         .sort((a,b)=>(a.meta.date < b.meta.date ? 1 : -1));
 });
+
+export async function getAllPostsMeta(): Promise<PostMeta[]> {
+  const posts = await loadAllPosts();
+  return posts.map((p)=>p.meta);
+}
+
+export async function getPostBySlug(slug:string): Promise<PostData | null> {
+  const posts = await loadAllPosts();
+  const found = posts.find((p) => p.meta.slug === slug);
+  
+  if (!found) throw new Error(`Post not found`);
+  if (IS_PRODUCTION && found.meta.draft) {
+    throw new Error(`Post not found`);
+  }
+  const proccessedContent = await remark().use(gfm).use(html).process(found.content);
+
+  return{
+
+    ...found.meta,
+    contentHTML: proccessedContent.toString(),
+  }
+}
+
+export async function getAdjacentPosts(
+    slug: string
+){
+    const metas = await getAllPostsMeta();
+    const index = metas.findIndex((m) => m.slug === slug);
+
+    return {
+        previous: index > 0 ? metas[index - 1] : null,
+        next: index > 0 ? metas[index - 1] : null,      
+    };
+}
+
+
+export async function getAllSlugs(): Promise<string[]> {
+  const metas = await getAllPostsMeta();
+  return metas.map((m) => m.slug);
+}
+
+export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
+  const metas = await getAllPostsMeta();
+  return metas.filter((m) => m.tags?.includes(tag));
+}
+
+export async function getAllTags(): Promise<string[]> {
+  const metas = await getAllPostsMeta();
+  const set = new Set<string>();
+  for (const m of metas) {
+    m.tags?.forEach((t) => set.add(t));
+  }
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
+}
