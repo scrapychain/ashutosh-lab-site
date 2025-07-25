@@ -1,26 +1,303 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: #0f0f0f;
+  --color-foreground: #ffffff;
+  --color-card: #1a1a1a;
+  --color-card-foreground: #ffffff;
+  --color-primary: #ffffff;
+  --color-primary-foreground: #0f0f0f;
+  --color-secondary: #262626;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #262626;
+  --color-muted-foreground: #a3a3a3;
+  --color-accent: #262626;
+  --color-accent-foreground: #ffffff;
+  --color-border: #262626;
+  --color-input: #262626;
+  --color-ring: #525252;
+  
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-purple-400: #c084fc;
+  --color-purple-500: #a855f7;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  
+  --radius: 0.5rem;
+  --radius-full: 9999px;
+  
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f0f0f;
+    --foreground: #ffffff;
+    --card: #1a1a1a;
+    --card-foreground: #ffffff;
+    --primary: #ffffff;
+    --primary-foreground: #0f0f0f;
+    --secondary: #262626;
+    --secondary-foreground: #ffffff;
+    --muted: #262626;
+    --muted-foreground: #a3a3a3;
+    --accent: #262626;
+    --accent-foreground: #ffffff;
+    --border: #262626;
+    --input: #262626;
+    --ring: #525252;
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-background text-foreground antialiased;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Typography Components */
+@layer components {
+  .hero-title {
+    @apply text-5xl md:text-6xl font-light tracking-tight text-foreground mb-6;
+  }
+  
+  .hero-description {
+    @apply text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8;
+  }
+  
+  .section-title {
+    @apply text-2xl md:text-3xl font-medium text-foreground mb-8;
+  }
+  
+  .card-title {
+    @apply text-lg font-semibold text-card-foreground mb-2;
+  }
+  
+  .card-date {
+    @apply text-sm text-muted-foreground mb-4;
+  }
+}
+
+/* Button Components */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 border border-border bg-transparent text-foreground rounded-lg font-medium transition-all duration-200 hover:bg-secondary hover:border-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground border-primary hover:bg-muted-foreground hover:border-muted-foreground;
+  }
+  
+  .btn-ghost {
+    @apply border-transparent hover:bg-accent hover:text-accent-foreground hover:border-transparent;
+  }
+}
+
+/* Card Components */
+@layer components {
+  .card {
+    @apply bg-card border border-border rounded-lg p-6 transition-all duration-200 hover:border-muted-foreground;
+    animation: var(--animate-fade-in);
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1;
+  }
+  
+  .journal-card {
+    @apply card card-hover;
+  }
+  
+  .project-card {
+    @apply card card-hover flex items-center justify-between;
+  }
+}
+
+/* Social Icons */
+@layer components {
+  .social-icon {
+    @apply w-12 h-12 border border-border rounded-full flex items-center justify-center text-muted-foreground transition-all duration-200 hover:border-muted-foreground hover:text-foreground hover:bg-secondary;
+  }
+}
+
+/* Status Components */
+@layer components {
+  .status-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium;
+  }
+  
+  .status-in-progress {
+    @apply bg-blue-500/10 text-blue-400 border border-blue-500/20;
+  }
+  
+  .status-concept {
+    @apply bg-purple-500/10 text-purple-400 border border-purple-500/20;
+  }
+  
+  .status-shipped {
+    @apply bg-green-500/10 text-green-400 border border-green-500/20;
+  }
+  
+  .status-dot {
+    @apply w-2 h-2 rounded-full bg-current;
+  }
+}
+
+/* Progress Components */
+@layer components {
+  .progress-bar {
+    @apply w-full h-2 bg-secondary rounded-full overflow-hidden my-4;
+  }
+  
+  .progress-fill {
+    @apply h-full bg-muted-foreground transition-all duration-300 ease-out;
+  }
+  
+  .progress-60 .progress-fill {
+    @apply w-3/5;
+  }
+  
+  .progress-30 .progress-fill {
+    @apply w-3/10;
+  }
+  
+  .progress-100 .progress-fill {
+    @apply w-full;
+  }
+}
+
+/* Form Components */
+@layer components {
+  .form-input {
+    @apply w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder:text-muted-foreground transition-colors duration-200 focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20;
+  }
+  
+  .form-group {
+    @apply mb-6;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-foreground mb-2;
+  }
+}
+
+/* Layout Components */
+@layer components {
+  .container {
+    @apply max-w-6xl mx-auto px-4 md:px-8;
+  }
+  
+  .hero-section {
+    @apply text-center py-16 md:py-24 border-b border-border;
+  }
+  
+  .section {
+    @apply py-16 md:py-20;
+  }
+  
+  .grid-journal {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+  
+  .grid-projects {
+    @apply space-y-4;
+  }
+}
+
+/* Animation Utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: var(--animate-fade-in);
+  }
+  
+  .animate-slide-up {
+    animation: var(--animate-slide-up);
+  }
+  
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+}
+
+/* Responsive Typography */
+@layer utilities {
+  .text-hero {
+    @apply text-4xl md:text-5xl lg:text-6xl font-light tracking-tight;
+  }
+  
+  .text-section {
+    @apply text-xl md:text-2xl lg:text-3xl font-medium;
+  }
+  
+  .text-body-large {
+    @apply text-base md:text-lg lg:text-xl;
+  }
+}
+
+/* Custom scrollbar */
+@layer base {
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground;
+  }
+}
+
+/* Focus styles */
+@layer base {
+  .focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
 }

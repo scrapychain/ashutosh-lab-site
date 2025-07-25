@@ -10,10 +10,26 @@
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.11",
+    "@types/markdown-it": "^14.1.2",
+    "@types/marked": "^5.0.2",
     "daisyui": "^5.0.46",
+    "fs": "^0.0.1-security",
+    "gray-matter": "^4.0.3",
+    "mark": "^0.10.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-container": "^4.0.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-table-of-contents": "^0.9.0",
+    "markdown-it-video": "^0.6.3",
     "next": "15.4.2",
+    "path": "^0.12.7",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-html": "^16.0.1",
+    "zod": "^4.0.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

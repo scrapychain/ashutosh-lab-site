@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,12 +23,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const header = (
+
+    <header className="bg-gray-800 text-white p-4">
+      <Link href="/" className="text-2xl font-bold">
+        Ashutosh&apos;s Lab
+      </Link>
+    </header>
+  );
+  const footer = (    
+  <footer>
+      <p>        © 2023 Ashutosh Rana. All rights reserved.
+      </p>
+    </footer>
+  )
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {header}
         {children}
+        {footer}
       </body>
     </html>
   );
